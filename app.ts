@@ -3,13 +3,14 @@ import { getRecipeInformation, getRecipesFromIngredients } from './src/recipe-ap
 import express from 'express';
 import { promises as fs } from 'fs';
 import uuid4 from 'uuid4';
+var cors = require('cors')
 
 const app = express();
 const port = 8080;
 const router = express.Router()
-
 app.use(express.text());
 app.use(express.json());
+app.use(cors());
 app.use(router);
 
 router.get('/', (req: any, res: any) => {
