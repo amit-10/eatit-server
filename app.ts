@@ -36,12 +36,18 @@ router.post('/upload', async function (req: any, res: any) {
 router.get('/fullRecipe', async function (req: any, res: any) {
     getRecipeInformation(req.query.recipeId).then((recipe: any) => {
         res.json({recipe})
+    }).catch((error) => {
+        console.log(error);
+        res.sendStatus(500);
     })
 })
 
-router.get('/recipesOfIngredients', async function (req: any, res: any) {
-    getRecipesFromIngredients(req.query.ingredients, req.query.recipeType).then((recipes: any) => {
+router.post('/recipesOfIngredients', async function (req: any, res: any) {
+    getRecipesFromIngredients(req.body.Ingredients, req.query.RecipeType).then((recipes: any) => {
         res.json({recipe: recipes})
+    }).catch((error) => {
+        console.log(error);
+        res.sendStatus(500);
     })
 })
 
