@@ -18,6 +18,7 @@
   "homepage": "https://github.com/amit-10/eatit-server#readme",
   "dependencies": {
     "@google-cloud/vision": "^2.4.0",
+    "axios": "^0.24.0",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
     "ts-node": "^10.4.0",
