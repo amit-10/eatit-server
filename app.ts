@@ -4,8 +4,8 @@ import express from 'express';
 import { promises as fs } from 'fs';
 import uuid4 from 'uuid4';
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 8080;
 const router = express.Router()
 
 app.use(express.text());
@@ -17,11 +17,14 @@ router.get('/', (req: any, res: any) => {
 })
 
 router.post('/upload', async function (req: any, res: any) {
-    const image = req.body;
+    const imageDataUrl = req.body;
+    var myRegexp = /(data:image\/)(.+?)(;base64,)(.+)/g;
+    const [a, b, format, c, imageData] = myRegexp.exec(imageDataUrl);
     const imageName = uuid4();
-    const imagePath = `src/temp-images/${imageName}.png`;
+    const ext = format === "jpeg" ? "jpg" : format;
+    const imagePath = `src/temp-images/${imageName}.${ext}`;
 
-    await fs.writeFile(imagePath, image, {encoding: 'base64'});
+    await fs.writeFile(imagePath, imageData, { encoding: 'base64' });
 
     getIngredientsFromImage(imagePath).then((ingredients: any) => {
         res.json({
@@ -35,7 +38,7 @@ router.post('/upload', async function (req: any, res: any) {
 
 router.get('/fullRecipe', async function (req: any, res: any) {
     getRecipeInformation(req.query.recipeId).then((recipe: any) => {
-        res.json({recipe})
+        res.json({ recipe })
     }).catch((error) => {
         console.log(error);
         res.sendStatus(500);
@@ -44,7 +47,7 @@ router.get('/fullRecipe', async function (req: any, res: any) {
 
 router.post('/recipesOfIngredients', async function (req: any, res: any) {
     getRecipesFromIngredients(req.body.Ingredients, req.query.RecipeType).then((recipes: any) => {
-        res.json({recipe: recipes})
+        res.json({ recipe: recipes })
     }).catch((error) => {
         console.log(error);
         res.sendStatus(500);
